@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -239,7 +238,35 @@ button:active{
 
 </div>
 
+<!-- FIREBASE SDK — writes signups to the same 'adiclub' node the admin panel reads -->
+<script type="module">
+    import { initializeApp }            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, push }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+    const firebaseConfig = {
+      apiKey:            "AIzaSyDvbS83az6cjeIKkCh16Ic8Pr50I54fKv4",
+      authDomain:        "adidas-training-mtd.firebaseapp.com",
+      databaseURL:       "https://adidas-training-mtd-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId:         "adidas-training-mtd",
+      storageBucket:     "adidas-training-mtd.firebasestorage.app",
+      messagingSenderId: "208658627122",
+      appId:             "1:208658627122:web:8dd72cb4576e26b1735a2b"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db  = getDatabase(app);
+    window._saveSignup = async (data) => { await push(ref(db, 'adiclub'), data); };
+    window._fbReady    = true;
+</script>
+
 <script>
+
+/* Build a LOCAL wall-clock timestamp like 2026-06-28T14:30:00
+   (NOT UTC / toISOString) so the admin panel parses it in local time. */
+function localTimestamp(){
+    const d = new Date();
+    const p = n => String(n).padStart(2, '0');
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate())
+         + 'T' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+}
 
 function generateBarcodes(){
 
@@ -252,6 +279,16 @@ function generateBarcodes(){
     if(!phoneInput || !emailInput){
         alert("Please enter a phone number and email.");
         return;
+    }
+
+    /* Save signup to Firebase (fire-and-forget so barcodes show instantly,
+       even on a slow or offline connection). */
+    if(window._fbReady && typeof window._saveSignup === "function"){
+        window._saveSignup({
+            phone:     phoneInput,
+            email:     emailInput,
+            timestamp: localTimestamp()
+        }).catch(err => console.warn("Signup save failed:", err));
     }
 
     /*
@@ -314,4 +351,3 @@ window.onload = function(){
 
 </body>
 </html>
-```
