@@ -3,351 +3,235 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-<title>Adidas Signup</title>
-
+<title>adidas · Signup</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-
 <style>
-
 :root{
-    --bg:#000000;
-    --card:#ffffff;
-    --input:#121212;
-    --border:#242424;
-    --text:#ffffff;
-    --muted:#8a8a8a;
+  --bg:#0a0a0a;
+  --card:#ffffff;
+  --input:#141414;
+  --border:#262626;
+  --text:#ffffff;
+  --muted:#8a8a8a;
+  --accent:#ffffff;
+  --disp:'Barlow Condensed',sans-serif;
+  --body:'Barlow',-apple-system,sans-serif;
 }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{width:100%;min-height:100%;background:var(--bg);color:var(--text);font-family:var(--body);overflow-x:hidden;}
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+/* animated backdrop */
+body::before{
+  content:"";position:fixed;inset:-30%;z-index:0;
+  background:
+    radial-gradient(40% 40% at 20% 20%, rgba(255,255,255,0.07), transparent 60%),
+    radial-gradient(45% 45% at 85% 30%, rgba(255,255,255,0.05), transparent 60%),
+    radial-gradient(50% 50% at 50% 90%, rgba(255,255,255,0.06), transparent 60%);
+  animation:drift 18s ease-in-out infinite alternate;
 }
+@keyframes drift{ from{transform:translate(-2%, -2%) scale(1);} to{transform:translate(3%, 2%) scale(1.08);} }
 
-html,
-body{
-    width:100%;
-    height:100%;
-    background:var(--bg);
-    color:var(--text);
-    font-family:Arial, Helvetica, sans-serif;
+.screen{position:relative;z-index:1;width:100%;min-height:100vh;}
+.hidden{display:none!important;}
+
+/* ─── SIGNUP ─── */
+.signup-container{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:24px;}
+.form-container{width:100%;max-width:460px;animation:cardIn .6s cubic-bezier(.2,.8,.2,1) both;}
+@keyframes cardIn{ from{opacity:0;transform:translateY(24px) scale(.98);} to{opacity:1;transform:none;} }
+
+.brand{display:flex;flex-direction:column;align-items:center;margin-bottom:8px;}
+.brand .mark{display:flex;gap:6px;align-items:flex-end;height:34px;margin-bottom:14px;}
+.brand .mark span{display:block;width:9px;border-radius:2px;background:#fff;transform:skewX(-12deg);animation:barUp .7s cubic-bezier(.2,.8,.2,1) both;}
+.brand .mark span:nth-child(1){height:60%;animation-delay:.05s;}
+.brand .mark span:nth-child(2){height:80%;animation-delay:.12s;}
+.brand .mark span:nth-child(3){height:100%;animation-delay:.19s;}
+@keyframes barUp{ from{transform:skewX(-12deg) scaleY(0);opacity:0;transform-origin:bottom;} to{transform:skewX(-12deg) scaleY(1);opacity:1;} }
+
+.title{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:44px;line-height:.95;letter-spacing:.5px;text-align:center;}
+.subtitle{text-align:center;color:var(--muted);font-size:14px;letter-spacing:.04em;margin-top:8px;}
+.store-badge{display:block;width:max-content;max-width:100%;margin:18px auto 30px;padding:7px 16px;border:1px solid var(--border);border-radius:999px;background:rgba(255,255,255,0.04);font-family:var(--disp);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:13px;color:#fff;}
+.store-badge.warn{border-color:#5a3a1a;background:rgba(255,160,60,0.08);color:#ffb86b;}
+
+.field{position:relative;margin-bottom:16px;}
+.field input{
+  width:100%;height:62px;background:var(--input);border:1.5px solid var(--border);border-radius:14px;
+  color:#fff;padding:24px 18px 8px;font-size:16px;font-family:var(--body);outline:none;
+  transition:border-color .2s, box-shadow .2s, background .2s;
 }
-
-.screen{
-    width:100%;
-    min-height:100vh;
+.field input:focus{border-color:#fff;box-shadow:0 0 0 4px rgba(255,255,255,0.06);background:#181818;}
+.field label{
+  position:absolute;left:18px;top:20px;color:var(--muted);font-size:16px;pointer-events:none;
+  transition:all .18s ease;
 }
+.field input:focus + label,
+.field input:not(:placeholder-shown) + label{ top:10px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#bdbdbd; }
 
-.hidden{
-    display:none;
+.btn{
+  width:100%;height:62px;border:none;border-radius:14px;background:#fff;color:#000;
+  font-family:var(--disp);font-size:19px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  cursor:pointer;margin-top:6px;transition:transform .12s ease, box-shadow .2s ease, opacity .2s;
+  box-shadow:0 10px 30px rgba(0,0,0,0.35);
 }
+.btn:hover{box-shadow:0 14px 38px rgba(255,255,255,0.12);}
+.btn:active{transform:translateY(2px) scale(.99);}
+.btn:disabled{opacity:.6;cursor:default;}
 
-/* SIGNUP SCREEN */
+.hint{text-align:center;color:#5f5f5f;font-size:12px;margin-top:18px;line-height:1.6;}
 
-.signup-container{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:24px;
-}
+/* ─── BARCODES ─── */
+.barcode-screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;gap:18px;padding:26px 20px;max-width:520px;margin:0 auto;}
+.done-head{text-align:center;margin-bottom:4px;animation:cardIn .5s ease both;}
+.check{width:58px;height:58px;border-radius:50%;background:#fff;color:#000;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:30px;animation:pop .5s cubic-bezier(.2,1.3,.5,1) both;}
+@keyframes pop{ from{transform:scale(0);} to{transform:scale(1);} }
+.done-head h2{font-family:var(--disp);font-weight:900;text-transform:uppercase;font-size:30px;letter-spacing:.5px;}
+.done-head p{color:var(--muted);font-size:13px;margin-top:4px;}
 
-.form-container{
-    width:100%;
-    max-width:500px;
-}
-
-.logo{
-    text-align:center;
-    font-size:32px;
-    font-weight:700;
-    letter-spacing:3px;
-    margin-bottom:40px;
-}
-
-input{
-    width:100%;
-    height:60px;
-    background:var(--input);
-    border:1px solid var(--border);
-    border-radius:14px;
-    color:white;
-    padding:0 18px;
-    font-size:16px;
-    margin-bottom:14px;
-}
-
-input:focus{
-    outline:none;
-    border-color:white;
-}
-
-button{
-    width:100%;
-    height:60px;
-    border:none;
-    border-radius:14px;
-    background:white;
-    color:black;
-    font-size:16px;
-    font-weight:700;
-    cursor:pointer;
-}
-
-button:active{
-    transform:scale(.99);
-}
-
-/* BARCODE SCREEN */
-
-.barcode-screen{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:space-between;
-    padding:20px;
-}
-
-.barcode-section{
-    width:100%;
-}
-
-.barcode-label{
-    text-align:center;
-    font-size:14px;
-    letter-spacing:3px;
-    color:var(--muted);
-    margin-bottom:12px;
-    font-weight:600;
-}
-
-.barcode-card{
-    background:white;
-    border-radius:18px;
-    padding:18px;
-}
-
-.barcode-card svg{
-    width:100%;
-    height:180px;
-}
-
-.value-display{
-    text-align:center;
-    margin-top:12px;
-    font-size:18px;
-    word-break:break-word;
-}
-
-.reset-button{
-    margin-top:20px;
-}
-
+.barcode-section{width:100%;animation:cardIn .55s cubic-bezier(.2,.8,.2,1) both;}
+.barcode-section:nth-of-type(2){animation-delay:.08s;}
+.barcode-label{text-align:center;font-family:var(--disp);font-weight:700;font-size:13px;letter-spacing:.22em;color:var(--muted);margin-bottom:10px;text-transform:uppercase;}
+.barcode-card{background:#fff;border-radius:18px;padding:18px;box-shadow:0 16px 40px rgba(0,0,0,0.4);}
+.barcode-card svg{width:100%;height:170px;display:block;}
+.value-display{text-align:center;margin-top:12px;font-size:16px;word-break:break-word;color:#dcdcdc;}
+.reset-button{margin-top:22px;background:transparent;color:#fff;border:1.5px solid var(--border);box-shadow:none;}
+.reset-button:hover{border-color:#fff;box-shadow:none;}
 </style>
 </head>
-
 <body>
 
-<!-- SIGNUP PAGE -->
-
+<!-- SIGNUP -->
 <div id="signupScreen" class="screen">
+  <div class="signup-container">
+    <div class="form-container">
+      <div class="brand">
+        <div class="mark"><span></span><span></span><span></span></div>
+      </div>
+      <div class="title">Join adiClub</div>
+      <div class="subtitle">Sign up to get your member barcodes</div>
+      <span id="storeBadge" class="store-badge">Loading store…</span>
 
-    <div class="signup-container">
+      <div class="field">
+        <input type="tel" id="phone" placeholder=" " autocomplete="tel" inputmode="tel">
+        <label for="phone">Phone Number</label>
+      </div>
+      <div class="field">
+        <input type="email" id="email" placeholder=" " autocomplete="email" inputmode="email">
+        <label for="email">Email Address</label>
+      </div>
 
-        <div class="form-container">
-
-            <div class="logo">
-                ADIDAS SIGNUP
-            </div>
-
-            <input
-                type="tel"
-                id="phone"
-                placeholder="Phone Number"
-                autocomplete="tel">
-
-            <input
-                type="email"
-                id="email"
-                placeholder="Email Address"
-                autocomplete="email">
-
-            <button onclick="generateBarcodes()">
-                Sign Up
-            </button>
-
-        </div>
-
+      <button class="btn" id="signupBtn" onclick="generateBarcodes()">Sign Up</button>
+      <p class="hint">Your details are used only to create your barcodes.</p>
     </div>
-
+  </div>
 </div>
 
-<!-- BARCODE PAGE -->
-
+<!-- BARCODES -->
 <div id="barcodeScreen" class="screen hidden">
-
-    <div class="barcode-screen">
-
-        <!-- TOP BARCODE -->
-
-        <div class="barcode-section">
-
-            <div class="barcode-label">
-                PHONE NUMBER
-            </div>
-
-            <div class="barcode-card">
-                <svg id="phoneBarcode"></svg>
-            </div>
-
-            <div
-                id="phoneValue"
-                class="value-display">
-            </div>
-
-        </div>
-
-        <!-- BOTTOM BARCODE -->
-
-        <div class="barcode-section">
-
-            <div class="barcode-label">
-                EMAIL
-            </div>
-
-            <div class="barcode-card">
-                <svg id="emailBarcode"></svg>
-            </div>
-
-            <div
-                id="emailValue"
-                class="value-display">
-            </div>
-
-            <button
-                class="reset-button"
-                onclick="startOver()">
-                New Signup
-            </button>
-
-        </div>
-
+  <div class="barcode-screen">
+    <div class="done-head">
+      <div class="check">✓</div>
+      <h2>You're In</h2>
+      <p>Scan these at the counter</p>
     </div>
 
+    <div class="barcode-section">
+      <div class="barcode-label">Phone Number</div>
+      <div class="barcode-card"><svg id="phoneBarcode"></svg></div>
+      <div id="phoneValue" class="value-display"></div>
+    </div>
+
+    <div class="barcode-section">
+      <div class="barcode-label">Email</div>
+      <div class="barcode-card"><svg id="emailBarcode"></svg></div>
+      <div id="emailValue" class="value-display"></div>
+      <button class="btn reset-button" onclick="startOver()">New Signup</button>
+    </div>
+  </div>
 </div>
 
-<!-- FIREBASE SDK — writes signups to the same 'adiclub' node the admin panel reads -->
+<!-- FIREBASE — saves only { store, timestamp } to the same 'adiclub' node the admin reads -->
 <script type="module">
-    import { initializeApp }            from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, push }   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-    const firebaseConfig = {
-      apiKey:            "AIzaSyDvbS83az6cjeIKkCh16Ic8Pr50I54fKv4",
-      authDomain:        "adidas-training-mtd.firebaseapp.com",
-      databaseURL:       "https://adidas-training-mtd-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId:         "adidas-training-mtd",
-      storageBucket:     "adidas-training-mtd.firebasestorage.app",
-      messagingSenderId: "208658627122",
-      appId:             "1:208658627122:web:8dd72cb4576e26b1735a2b"
-    };
-    const app = initializeApp(firebaseConfig);
-    const db  = getDatabase(app);
-    window._saveSignup = async (data) => { await push(ref(db, 'adiclub'), data); };
-    window._fbReady    = true;
+  import { initializeApp }          from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  const firebaseConfig = {
+    apiKey:            "AIzaSyDvbS83az6cjeIKkCh16Ic8Pr50I54fKv4",
+    authDomain:        "adidas-training-mtd.firebaseapp.com",
+    databaseURL:       "https://adidas-training-mtd-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId:         "adidas-training-mtd",
+    storageBucket:     "adidas-training-mtd.firebasestorage.app",
+    messagingSenderId: "208658627122",
+    appId:             "1:208658627122:web:8dd72cb4576e26b1735a2b"
+  };
+  const app = initializeApp(firebaseConfig);
+  const db  = getDatabase(app);
+  // Only the store + timestamp are saved. Phone/email are NEVER sent.
+  window._saveSignup = async (data) => { await push(ref(db, 'adiclub'), data); };
+  window._fbReady    = true;
 </script>
 
 <script>
+/* Store codes (must match the admin logins). */
+const STORE_NAMES = {
+  'NZ1104': 'NZ1104 BRITOMART',
+  'NZ1113': 'NZ1113 CUSTOMS ST'
+};
 
-/* Build a LOCAL wall-clock timestamp like 2026-06-28T14:30:00
-   (NOT UTC / toISOString) so the admin panel parses it in local time. */
+/* Read ?store= from the QR link. */
+const params    = new URLSearchParams(window.location.search);
+const storeCode = (params.get('store') || '').toUpperCase().trim();
+const storeName = STORE_NAMES[storeCode] || null;
+
+window.addEventListener('DOMContentLoaded', () => {
+  const badge = document.getElementById('storeBadge');
+  if (storeName) {
+    badge.textContent = storeName;
+    badge.classList.remove('warn');
+  } else {
+    badge.textContent = 'Store not set — open via your store QR';
+    badge.classList.add('warn');
+  }
+  document.getElementById('phone').focus();
+});
+
+/* LOCAL wall-clock timestamp like 2026-06-28T14:30:00 (not UTC) so the admin reads NZ time. */
 function localTimestamp(){
-    const d = new Date();
-    const p = n => String(n).padStart(2, '0');
-    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate())
-         + 'T' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+  const d = new Date(), p = n => String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'T'+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds());
 }
 
 function generateBarcodes(){
+  const phoneInput = document.getElementById("phone").value.trim();
+  const emailInput = document.getElementById("email").value.trim();
+  if(!phoneInput || !emailInput){ alert("Please enter a phone number and email."); return; }
 
-    const phoneInput =
-        document.getElementById("phone").value.trim();
+  /* Save ONLY store + timestamp (fire-and-forget so barcodes show instantly). */
+  if(window._fbReady && typeof window._saveSignup === "function"){
+    window._saveSignup({ store: storeCode || 'UNKNOWN', timestamp: localTimestamp() })
+      .catch(err => console.warn("Signup save failed:", err));
+  }
 
-    const emailInput =
-        document.getElementById("email").value.trim();
+  /* Append carriage return after each value (unchanged behaviour). */
+  const phoneBarcodeValue = phoneInput + "\r";
+  const emailBarcodeValue = emailInput + "\r";
 
-    if(!phoneInput || !emailInput){
-        alert("Please enter a phone number and email.");
-        return;
-    }
+  JsBarcode("#phoneBarcode", phoneBarcodeValue, {format:"CODE128",displayValue:false,height:170,margin:4});
+  JsBarcode("#emailBarcode", emailBarcodeValue, {format:"CODE128",displayValue:false,height:170,margin:4});
 
-    /* Save signup to Firebase (fire-and-forget so barcodes show instantly,
-       even on a slow or offline connection). */
-    if(window._fbReady && typeof window._saveSignup === "function"){
-        window._saveSignup({
-            phone:     phoneInput,
-            email:     emailInput,
-            timestamp: localTimestamp()
-        }).catch(err => console.warn("Signup save failed:", err));
-    }
+  document.getElementById("phoneValue").textContent = phoneInput;
+  document.getElementById("emailValue").textContent = emailInput;
 
-    /*
-      Appends Enter/Carriage Return
-      after the value.
-    */
-
-    const phoneBarcodeValue =
-        phoneInput + "\r";
-
-    const emailBarcodeValue =
-        emailInput + "\r";
-
-    JsBarcode("#phoneBarcode", phoneBarcodeValue, {
-        format:"CODE128",
-        displayValue:false,
-        height:180,
-        margin:4
-    });
-
-    JsBarcode("#emailBarcode", emailBarcodeValue, {
-        format:"CODE128",
-        displayValue:false,
-        height:180,
-        margin:4
-    });
-
-    document.getElementById("phoneValue")
-        .textContent = phoneInput;
-
-    document.getElementById("emailValue")
-        .textContent = emailInput;
-
-    document.getElementById("signupScreen")
-        .classList.add("hidden");
-
-    document.getElementById("barcodeScreen")
-        .classList.remove("hidden");
+  document.getElementById("signupScreen").classList.add("hidden");
+  document.getElementById("barcodeScreen").classList.remove("hidden");
+  window.scrollTo(0,0);
 }
 
 function startOver(){
-
-    document.getElementById("phone").value = "";
-    document.getElementById("email").value = "";
-
-    document.getElementById("barcodeScreen")
-        .classList.add("hidden");
-
-    document.getElementById("signupScreen")
-        .classList.remove("hidden");
-
-    document.getElementById("phone").focus();
+  document.getElementById("phone").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("barcodeScreen").classList.add("hidden");
+  document.getElementById("signupScreen").classList.remove("hidden");
+  document.getElementById("phone").focus();
 }
-
-window.onload = function(){
-    document.getElementById("phone").focus();
-};
-
 </script>
-
 </body>
 </html>
