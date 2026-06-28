@@ -1,0 +1,317 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>Adidas Signup</title>
+
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+<style>
+
+:root{
+    --bg:#000000;
+    --card:#ffffff;
+    --input:#121212;
+    --border:#242424;
+    --text:#ffffff;
+    --muted:#8a8a8a;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.screen{
+    width:100%;
+    min-height:100vh;
+}
+
+.hidden{
+    display:none;
+}
+
+/* SIGNUP SCREEN */
+
+.signup-container{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:24px;
+}
+
+.form-container{
+    width:100%;
+    max-width:500px;
+}
+
+.logo{
+    text-align:center;
+    font-size:32px;
+    font-weight:700;
+    letter-spacing:3px;
+    margin-bottom:40px;
+}
+
+input{
+    width:100%;
+    height:60px;
+    background:var(--input);
+    border:1px solid var(--border);
+    border-radius:14px;
+    color:white;
+    padding:0 18px;
+    font-size:16px;
+    margin-bottom:14px;
+}
+
+input:focus{
+    outline:none;
+    border-color:white;
+}
+
+button{
+    width:100%;
+    height:60px;
+    border:none;
+    border-radius:14px;
+    background:white;
+    color:black;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+button:active{
+    transform:scale(.99);
+}
+
+/* BARCODE SCREEN */
+
+.barcode-screen{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:20px;
+}
+
+.barcode-section{
+    width:100%;
+}
+
+.barcode-label{
+    text-align:center;
+    font-size:14px;
+    letter-spacing:3px;
+    color:var(--muted);
+    margin-bottom:12px;
+    font-weight:600;
+}
+
+.barcode-card{
+    background:white;
+    border-radius:18px;
+    padding:18px;
+}
+
+.barcode-card svg{
+    width:100%;
+    height:180px;
+}
+
+.value-display{
+    text-align:center;
+    margin-top:12px;
+    font-size:18px;
+    word-break:break-word;
+}
+
+.reset-button{
+    margin-top:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIGNUP PAGE -->
+
+<div id="signupScreen" class="screen">
+
+    <div class="signup-container">
+
+        <div class="form-container">
+
+            <div class="logo">
+                ADIDAS SIGNUP
+            </div>
+
+            <input
+                type="tel"
+                id="phone"
+                placeholder="Phone Number"
+                autocomplete="tel">
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Email Address"
+                autocomplete="email">
+
+            <button onclick="generateBarcodes()">
+                Sign Up
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- BARCODE PAGE -->
+
+<div id="barcodeScreen" class="screen hidden">
+
+    <div class="barcode-screen">
+
+        <!-- TOP BARCODE -->
+
+        <div class="barcode-section">
+
+            <div class="barcode-label">
+                PHONE NUMBER
+            </div>
+
+            <div class="barcode-card">
+                <svg id="phoneBarcode"></svg>
+            </div>
+
+            <div
+                id="phoneValue"
+                class="value-display">
+            </div>
+
+        </div>
+
+        <!-- BOTTOM BARCODE -->
+
+        <div class="barcode-section">
+
+            <div class="barcode-label">
+                EMAIL
+            </div>
+
+            <div class="barcode-card">
+                <svg id="emailBarcode"></svg>
+            </div>
+
+            <div
+                id="emailValue"
+                class="value-display">
+            </div>
+
+            <button
+                class="reset-button"
+                onclick="startOver()">
+                New Signup
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+function generateBarcodes(){
+
+    const phoneInput =
+        document.getElementById("phone").value.trim();
+
+    const emailInput =
+        document.getElementById("email").value.trim();
+
+    if(!phoneInput || !emailInput){
+        alert("Please enter a phone number and email.");
+        return;
+    }
+
+    /*
+      Appends Enter/Carriage Return
+      after the value.
+    */
+
+    const phoneBarcodeValue =
+        phoneInput + "\r";
+
+    const emailBarcodeValue =
+        emailInput + "\r";
+
+    JsBarcode("#phoneBarcode", phoneBarcodeValue, {
+        format:"CODE128",
+        displayValue:false,
+        height:180,
+        margin:4
+    });
+
+    JsBarcode("#emailBarcode", emailBarcodeValue, {
+        format:"CODE128",
+        displayValue:false,
+        height:180,
+        margin:4
+    });
+
+    document.getElementById("phoneValue")
+        .textContent = phoneInput;
+
+    document.getElementById("emailValue")
+        .textContent = emailInput;
+
+    document.getElementById("signupScreen")
+        .classList.add("hidden");
+
+    document.getElementById("barcodeScreen")
+        .classList.remove("hidden");
+}
+
+function startOver(){
+
+    document.getElementById("phone").value = "";
+    document.getElementById("email").value = "";
+
+    document.getElementById("barcodeScreen")
+        .classList.add("hidden");
+
+    document.getElementById("signupScreen")
+        .classList.remove("hidden");
+
+    document.getElementById("phone").focus();
+}
+
+window.onload = function(){
+    document.getElementById("phone").focus();
+};
+
+</script>
+
+</body>
+</html>
+```
