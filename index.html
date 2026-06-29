@@ -210,8 +210,8 @@ function generateBarcodes(){
   }
 
   /* Append carriage return after each value (unchanged behaviour). */
-  const phoneBarcodeValue = phoneInput + "\r";
-  const emailBarcodeValue = emailInput + "\r";
+  const phoneBarcodeValue = phoneInput;
+  const emailBarcodeValue = emailInput;
 
   JsBarcode("#phoneBarcode", phoneBarcodeValue, {format:"CODE128",displayValue:false,height:170,margin:4});
   JsBarcode("#emailBarcode", emailBarcodeValue, {format:"CODE128",displayValue:false,height:170,margin:4});
